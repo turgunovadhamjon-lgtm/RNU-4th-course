@@ -1,5 +1,231 @@
 \chapter{Testing, Deployment, and Future Development}
 \label{ch:testing}
 
-% PLACEHOLDER - will be written after Chapter 3 is approved
-\textit{This chapter will be written after Chapter~3 review is completed.}
+This chapter addresses quality assurance through multi-level testing strategies, the deployment process to Google Play, App Store, and thirteen additional distribution channels, and the future development roadmap organized by time horizon.
+
+
+% =====================================================================
+\section{Testing Strategies and Quality Assurance}
+\label{sec:testing}
+
+Quality assurance was integrated throughout the CHOYXONA.UZ development process rather than relegated to a final phase, enabling early detection and correction of issues~\cite{sommerville2015}.
+The testing strategy employed multiple levels of verification as summarized in \cref{tab:testing-levels}.
+
+\begin{table}[htbp]
+\caption{Testing levels, tools, and scope in the CHOYXONA.UZ quality assurance strategy}
+\label{tab:testing-levels}
+\centering
+\small
+\begin{tabular}{llp{5.5cm}}
+\toprule
+\textbf{Level} & \textbf{Tool / Framework} & \textbf{Scope and Purpose} \\
+\midrule
+Unit tests     & \texttt{flutter\_test}, Dart VM & Individual functions: Haversine calculation, JSON serialization, booking validation, filter logic \\
+Widget tests   & \texttt{flutter\_test}          & UI components in isolation: ChoyxonaCard rendering, form validation, booking flow transitions \\
+Integration tests & \texttt{integration\_test}    & End-to-end workflows on device/emulator: registration, search-to-booking, admin management \\
+Performance    & Flutter DevTools, Profiler      & Cold start time, frame rate, query latency, memory usage on mid-range devices \\
+Security       & Manual + Firebase rules emulator & Auth enforcement, Firestore rules, input sanitization, token handling \\
+UAT            & Beta testers (customers + owners) & Usability, clarity, operational feasibility, satisfaction feedback \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Unit and Widget Testing}
+\label{subsec:unit-widget}
+
+\textbf{Unit tests} run in the Dart VM without requiring a device, enabling rapid execution.
+Test files reside in a \texttt{test/} directory mirroring the \texttt{lib/} structure.
+Tests verify pure functions (Haversine distance, see \cref{eq:haversine}), state management logic, data transformation (JSON serialization/deserialization), and business rule enforcement (booking validation, availability checking)~\cite{napoli2021}.
+
+\textbf{Test-driven development (TDD)} guided implementation of critical algorithms.
+Before implementing booking availability calculation, test cases were written for:
+\begin{itemize}
+  \item Fully booked time slots returning no availability;
+  \item Partial booking reducing available capacity;
+  \item Overlapping booking requests handled correctly;
+  \item Time boundary conditions at opening and closing hours;
+  \item Maximum party size enforcement.
+\end{itemize}
+
+\textbf{Widget tests} render components in isolation, simulating user interactions (taps, text entry) and asserting on resulting widget tree state.
+Verified components include \texttt{ChoyxonaCard} rendering with various data combinations, search filter controls, booking flow screen transitions, and form validation error messages~\cite{windmill2020}.
+
+\subsection{Integration and Performance Testing}
+\label{subsec:integration-perf}
+
+\textbf{Integration tests} execute on actual devices, simulating realistic user interactions through the complete stack using the \texttt{integration\_test} package.
+Key end-to-end workflows tested include the complete registration flow, the search-to-booking journey, the administrator booking management cycle, and the review submission flow~\cite{payne2019}.
+
+\textbf{Performance testing} validated responsiveness on mid-range Android devices representative of the target demographic.
+Results are presented in \cref{tab:performance}.
+
+\begin{table}[htbp]
+\caption{Performance test results on mid-range Android devices}
+\label{tab:performance}
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Metric} & \textbf{Measured} & \textbf{Threshold} \\
+\midrule
+Cold start time (launcher $\to$ interactive) & $\sim$2.3\,s & $< 3$\,s \\
+Screen transition duration & $< 300$\,ms & $< 500$\,ms \\
+List scrolling frame rate & 60\,fps & $\geq 60$\,fps \\
+Firestore query latency (network) & $\sim$150\,ms & $< 300$\,ms \\
+Firestore query latency (cache) & $< 5$\,ms & $< 50$\,ms \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All metrics met or exceeded target thresholds.
+List scrolling maintained 60~fps through optimization with \texttt{cached\_network\_image} and lazy loading.
+Firestore local cache enabled instant display of previously loaded data~\cite{flutter_arch2024}.
+
+\subsection{Security Testing and User Acceptance}
+\label{subsec:security-uat}
+
+\textbf{Security testing} addressed vulnerabilities across three domains:
+\begin{itemize}
+  \item \textbf{Authentication}: password complexity enforcement, secure token storage (not exposed in logs), automatic token refresh, account lockout after repeated failures;
+  \item \textbf{Data access}: Firestore Security Rules correctly blocking unauthorized reads/writes via modified client requests;
+  \item \textbf{Input handling}: user text sanitized before storage and display, preventing injection~\cite{firebase_auth2024}.
+\end{itemize}
+
+\textbf{User acceptance testing (UAT)} involved beta testers representing target personas.
+Regular customers tested discovery and booking; establishment owners tested the administrator interface.
+Feedback was collected through structured questionnaires and open-ended interviews.
+Issues such as confusing navigation patterns and missing information informed refinements before release~\cite{nielsen2012}.
+
+\textbf{Bug tracking} employed a structured approach: each bug includes reproduction steps, expected/actual behavior, device information, and priority classification (Critical $\to$ Major $\to$ Minor).
+This systematic process ensured no reported issues were lost.
+
+
+% =====================================================================
+\section{Deployment and Distribution}
+\label{sec:deployment}
+
+CHOYXONA.UZ implements a comprehensive multi-platform distribution strategy, publishing to Google Play, Apple App Store, and 13 additional channels through Aptoide Connect~\cite{jia2014}.
+
+\subsection{Android and iOS Release Process}
+\label{subsec:release-process}
+
+The \textbf{Android release} process involves:
+\begin{enumerate}
+  \item Generating a signing key with \texttt{keytool} (stored securely, separate from repository);
+  \item Configuring \texttt{build.gradle.kts} with R8 code optimization and obfuscation;
+  \item Building the Android App Bundle via \texttt{flutter build appbundle};
+  \item Uploading to Google Play Console with store listing metadata (title, descriptions, screenshots, feature graphic, icon);
+  \item Completing content rating questionnaires (CHOYXONA.UZ: suitable for general audiences);
+  \item Submitting for review (typically hours for updates)~\cite{windmill2020}.
+\end{enumerate}
+
+The \textbf{iOS release} follows parallel requirements: Xcode archiving with certificates/provisioning profiles from Apple Developer Program, upload via App Store Connect, and TestFlight beta testing before public release.
+Apple review takes 1--3 days with detailed functionality and policy examination~\cite{napoli2021}.
+
+\subsection{Multi-Channel Distribution via Aptoide Connect}
+\label{subsec:aptoide}
+
+Beyond primary stores, CHOYXONA.UZ was published through Aptoide Connect to 13 additional distribution channels, making it available in \textbf{248 countries worldwide}.
+The complete distribution matrix is shown in \cref{tab:distribution}.
+
+\begin{table}[htbp]
+\caption{CHOYXONA.UZ distribution channels and target markets}
+\label{tab:distribution}
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Channel} & \textbf{Target Market} & \textbf{Strategic Value} \\
+\midrule
+Google Play Store  & Global (primary) & Largest Android marketplace \\
+Apple App Store    & Global (iOS)     & iOS user access \\
+\midrule
+ApkPure            & Limited Google Play regions & Alternative Android store \\
+Aptoide            & Global           & Independent marketplace (millions of users) \\
+CafeBazaar         & Iran             & Market without Google Play \\
+Huawei Petal Search & Huawei devices  & Devices without Google Play Services \\
+JioStore           & India            & Jio telecom ecosystem \\
+OPPO App Market    & OPPO devices     & Pre-installed store access \\
+RuStore            & Russia           & Alternative to Google Play \\
+Xiaomi GetApps     & Xiaomi devices   & Large device user base \\
+Softonic           & Global           & Cross-platform discovery \\
+LD Player          & Desktop emulator & Mobile apps on desktop \\
+DDU Market         & Regional         & Specific regional markets \\
+Aptoide Web        & Global (web)     & Browser-based access \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This multi-marketplace approach maximizes discoverability, ensures availability for devices without Google Play Services (particularly Huawei), and provides resilience against single-platform issues~\cite{jia2014}.
+
+\subsection{Beta Testing and Phased Rollouts}
+\label{subsec:beta-rollout}
+
+Beta testing programs enabled pre-release validation:
+\begin{itemize}
+  \item \textbf{Google Play}: internal testing (team), closed testing (invited), open testing (opt-in);
+  \item \textbf{TestFlight}: iOS beta distribution with tester management.
+\end{itemize}
+
+Early testers identified device-specific issues, regional setting problems, and usage patterns not revealed by internal testing.
+\textbf{Phased rollouts} release updates to increasing percentages of users, enabling early detection of subset-specific issues.
+Firebase Remote Config provides additional control for feature adjustments without new releases~\cite{firebase_functions2024}.
+
+
+% =====================================================================
+\section{Future Development Roadmap}
+\label{sec:roadmap}
+
+The roadmap organizes enhancements into three horizons as shown in \cref{tab:roadmap}.
+
+\begin{table}[htbp]
+\caption{Future development roadmap organized by time horizon}
+\label{tab:roadmap}
+\centering
+\small
+\begin{tabular}{lp{4cm}p{5.5cm}}
+\toprule
+\textbf{Horizon} & \textbf{Feature} & \textbf{Description} \\
+\midrule
+\multirow{3}{*}{\textbf{Short-term} (0--6 mo.)}
+  & Payment integration  & Click and Payme SDKs for in-app deposits \\
+  & Enhanced reviews     & Photo uploads, verification badges, helpful votes \\
+  & Improved search      & Voice search, suggestions, saved filters \\
+\midrule
+\multirow{3}{*}{\textbf{Medium-term} (6--18 mo.)}
+  & Loyalty program      & Points, tiered status, cross-establishment rewards \\
+  & AI recommendations   & Booking history analysis, NLP search, sentiment analysis \\
+  & POS integration      & Table management sync with point-of-sale systems \\
+\midrule
+\multirow{3}{*}{\textbf{Long-term} (18+ mo.)}
+  & Geographic expansion & Kazakhstan, Kyrgyzstan, Tajikistan markets \\
+  & White-label licensing & Customized platform for restaurant chains \\
+  & Tourism integration  & Partnerships with travel platforms and hotels \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Short-term} priorities focus on immediate value: payment integration with Click and Payme eliminates booking friction, enhanced reviews with photo uploads and verification badges enrich content quality, and voice search with saved filters improve discovery efficiency~\cite{gartner2023}.
+
+\textbf{Medium-term} investments deepen platform value: a loyalty program with points and tiered status increases retention, AI-powered recommendations using booking history and NLP improve personalization, and POS integration streamlines operations for larger establishments~\cite{opentable2023}.
+
+\textbf{Long-term} strategic opportunities include geographic expansion to Central Asian countries sharing teahouse traditions (Kazakhstan, Kyrgyzstan, Tajikistan), white-label licensing for restaurant chains, and tourism partnerships as Uzbekistan develops its visitor economy~\cite{statista2024}.
+
+Technical evolution accompanies feature development: adoption of Flutter's Impeller rendering engine for performance gains, Dart language features (patterns, records) for code expressiveness, desktop targets for web-based admin interfaces, and CDN integration for media content as the platform scales~\cite{flutter_arch2024}.
+
+
+% =====================================================================
+\section{Chapter Summary}
+\label{sec:ch4-summary}
+
+This chapter addressed three critical aspects of software delivery for CHOYXONA.UZ:
+
+First, \cref{sec:testing} described the multi-level testing strategy (\cref{tab:testing-levels}) spanning unit tests, widget tests, integration tests, performance testing, security testing, and user acceptance testing.
+Performance results (\cref{tab:performance}) confirmed all metrics within acceptable thresholds (2.3\,s cold start, 60\,fps scrolling, 150\,ms query latency).
+
+Second, \cref{sec:deployment} detailed the deployment to 15 distribution channels (\cref{tab:distribution}) spanning Google Play, Apple App Store, and 13 alternative marketplaces via Aptoide Connect, making the application available in 248 countries.
+Beta testing programs and phased rollouts ensure quality at each release.
+
+Third, \cref{sec:roadmap} presented the three-horizon development roadmap (\cref{tab:roadmap}): short-term payment and search improvements, medium-term AI and loyalty features, and long-term geographic expansion and white-label licensing.
+
+These processes ensure CHOYXONA.UZ is delivered with confidence, distributed broadly, and positioned for sustained growth.

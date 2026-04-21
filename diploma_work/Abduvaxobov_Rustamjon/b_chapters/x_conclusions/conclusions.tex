@@ -1,4 +1,53 @@
 \unchapter{Conclusions}
 
-% PLACEHOLDER - will be written at the end
-\textit{Conclusions will be written after all chapters are completed.}
+This thesis has presented the complete development journey of CHOYXONA.UZ, a comprehensive cross-platform mobile application designed to modernize restaurant and teahouse booking in Uzbekistan.
+From initial conceptualization through implementation, testing, and deployment to multiple distribution channels, the project demonstrates practical application of contemporary software engineering practices to address a genuine market need in the Central Asian hospitality industry.
+
+\vspace{4mm}
+\textbf{Hypothesis Verification.}
+The research hypothesis stated that \textit{a cross-platform mobile application built with Flutter and Firebase can effectively automate the booking process for traditional restaurants and teahouses in Uzbekistan while accommodating the specific requirements of the local hospitality market}.
+The evidence gathered through development, testing, and deployment confirms this hypothesis:
+
+\begin{itemize}
+  \item Flutter's single-codebase approach enabled delivery of consistent experiences across both iOS and Android without resource duplication, and the hot reload capability accelerated iterative development (Chapter~1).
+  \item Firebase's comprehensive service suite (Authentication, Firestore, Cloud Storage, Cloud Messaging) provided mature, reliable infrastructure that would have required significant effort to build independently (Chapter~2).
+  \item The implemented three-role system (customer, administrator, super administrator) successfully addresses the needs of all stakeholders, with real-time synchronization ensuring booking accuracy (Chapter~3).
+  \item Multi-level testing confirmed quality across unit, widget, integration, performance, and security dimensions, while deployment to 15 distribution channels across 248 countries ensured broad accessibility (Chapter~4).
+\end{itemize}
+
+\vspace{4mm}
+\textbf{Achievement of Research Tasks.}
+The five research tasks defined in the Introduction were systematically accomplished:
+
+\begin{enumerate}
+  \item \textbf{Literature review and platform analysis} (Chapter~1) --- surveyed mobile development evolution from native through hybrid to cross-platform frameworks, analyzed existing booking platforms (OpenTable, Resy, Eatigo, Glovo) to identify market gaps in Central Asia, and provided technical justification for the Flutter + Firebase technology stack.
+
+  \item \textbf{System architecture and database design} (Chapter~2) --- designed a three-layer architecture (presentation, business logic, data) with feature-based code organization, implemented a Firestore data model with strategic denormalization and composite indexing, established role-based security rules, and integrated Google Maps with Haversine distance calculation.
+
+  \item \textbf{Implementation of functional capabilities} (Chapter~3) --- delivered dual-method authentication (email/phone), multi-dimensional search with seven filter types, a four-step guided booking process with transactional consistency, administrator dashboards with KPIs and analytics, super administrator platform oversight, and an FCM-based notification system with five priority categories.
+
+  \item \textbf{Testing and quality assurance} (Chapter~4) --- applied test-driven development for critical algorithms, achieved performance metrics within thresholds (2.3\,s cold start, 60\,fps scrolling, 150\,ms query latency), verified security through authentication, data access, and input validation testing, and conducted user acceptance testing with beta testers.
+
+  \item \textbf{Deployment and future planning} (Chapter~4) --- published to Google Play, Apple App Store, and 13 additional channels via Aptoide Connect, implemented phased rollouts with Firebase Remote Config, and defined a three-horizon roadmap covering payment integration, AI recommendations, and geographic expansion.
+\end{enumerate}
+
+\vspace{4mm}
+\textbf{Key Contributions.}
+The contributions of this work extend beyond the delivered application:
+
+First, the project demonstrates that \textbf{localized, culturally-appropriate digital solutions} can successfully serve markets underserved by international platforms.
+Teahouse booking requirements differ meaningfully from Western restaurant assumptions, and addressing these differences created genuine value.
+
+Second, the \textbf{multi-platform distribution strategy} using Aptoide Connect illustrates an approach for reaching users beyond dominant app stores, relevant for any application targeting regions with diverse device ecosystems including Huawei devices without Google Play Services.
+
+Third, the \textbf{Flutter and Firebase combination} exemplifies rapid development without sacrificing quality, providing a reference architecture for similar projects in emerging markets.
+
+\vspace{4mm}
+\textbf{Limitations and Recommendations.}
+Current limitations include the absence of in-app payment processing, reliance on manual curation rather than algorithmic recommendation, and dependency on establishment adoption for marketplace growth.
+Recommendations for future research include investigation of recommendation algorithms effective with limited initial data, study of user experience requirements across Central Asian cultural contexts, and analysis of optimal incentive structures for two-sided marketplace adoption.
+
+\vspace{4mm}
+In conclusion, CHOYXONA.UZ represents both a functional product ready for market use and a demonstration of software engineering principles applied to a real-world problem.
+The application contributes to the digital transformation of the Uzbek hospitality industry, providing tools that help customers discover experiences and businesses reach customers more effectively.
+By preserving respect for cultural traditions while embracing technological progress, the project demonstrates that modernization and heritage can coexist productively.
