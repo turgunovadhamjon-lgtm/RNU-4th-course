@@ -1,0 +1,115 @@
+\documentclass{rnu-thesis}
+
+\usepackage[protrusion]{microtype}
+
+% --- Algorithms (float + pseudocode)
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage{tikz} % harmless if already loaded via the class
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,shapes.symbols,fit,calc,matrix,graphs}
+\tikzset{>=Stealth}
+
+
+% % --- Code listings with minted (creates a 'listing' float)
+% \usepackage[newfloat]{minted} % compile with -shell-escape
+% --- Code listings without external deps
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  numbersep=6pt,
+  frame=single,
+  breaklines=true,
+  tabsize=2,
+  float=htbp, % keep if you want floaty listings
+  captionpos=t % caption on top (to match your template)
+}
+% Optional: pick a mono font explicitly
+% \setmonofont{Mono} % or Consolas/DejaVu Sans Mono/etc.
+
+
+% --- Bibliography via biblatex ---
+\usepackage[backend=biber,style=ieee,sorting=nty,maxbibnames=99]{biblatex}
+\addbibresource{x_bibliography/references.bib}
+
+% ====== Thesis Metadata ======
+\setthesisinfoLV
+  {Tradicionālo restorānu automatizācija un rezervēšana}% LV Title
+  {Rustamjon Abduvakhobov}% LV Student
+  {Dr.sc.ing., Profesor Jelena Caiko}% LV Supervisor
+  {42484 Informācijas sistēmas (bak.)}% LV Study programme
+  {Dabaszinātņu un datortehnoloģiju katedra}% LV Department
+  {2026}% Year
+
+\setthesisinfoEN
+  {Automation and Booking of Traditional Restaurants}% EN Title
+  {Rustamjon Abduvakhobov}% EN Student
+  {Dr.sc.ing., Professor Jelena Caiko}% EN Supervisor
+  {42484 Information Systems (BSc)}% EN Study programme
+  {Department of Natural Sciences and Computer Engineering}% EN Department
+  {2026}% Year
+
+% ====== THESIS SCOPE - will be updated at the end ======
+\setthesisscope
+  {55}% Total pages
+  {5}% Total tables
+  {16}% Total figures
+  {0}% Total algorithms
+  {3}% Total listings
+  {2}% Total annexes
+  {35}% Total references
+
+\begin{document}
+
+\input{a_frontmatter/title_page_en}
+\clearpage
+
+% Page numbering starts at Title page but number not printed there (done).
+% Show numbers from here:
+\pagenumbering{arabic}
+
+% ===== Abstract & Keywords =====
+\input{a_frontmatter/abstract_en}
+\input{a_frontmatter/keywords}
+
+% ===== Table of Contents (and optional lists) =====
+\tableofcontents
+
+% ---- Meta lists: each on its own page, and not added to ToC ----
+\clearpage
+\begingroup\let\addcontentsline\relax\listoffigures\endgroup
+
+\clearpage
+\begingroup\let\addcontentsline\relax\listoftables\endgroup
+
+\clearpage
+
+
+
+% ===== Chapters =====
+% Unnumbered Introduction (still added to ToC)
+\input{b_chapters/a_introduction/introduction}
+
+\input{b_chapters/chapter1/chapter1}
+\input{b_chapters/chapter2/chapter2}
+\input{b_chapters/chapter3/chapter3}
+\input{b_chapters/chapter4/chapter4}
+
+% ===== Conclusions =====
+\input{b_chapters/x_conclusions/conclusions}
+
+% ===== Literature =====
+\printbibliography[heading=bibintoc,title=Literature]
+
+
+% ===== Appendices =====
+\appendix
+\input{y_backmatter/appendices/appendixA}
+\input{y_backmatter/appendices/appendixB}
+
+% ===== Declarations & Acknowledgments =====
+\input{y_backmatter/declaration}
+\input{y_backmatter/acknowledgments}
+
+\end{document}
