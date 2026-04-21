@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "693886142798",
+    "project_id": "choyxona-uz-app",
+    "storage_bucket": "choyxona-uz-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693886142798:android:3b070e6ab00d402196f61f",
+        "android_client_info": {
+          "package_name": "uz.choyxona.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBg_BsTHI8mOg33bG8dUGJUknXRkwpR-5o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
