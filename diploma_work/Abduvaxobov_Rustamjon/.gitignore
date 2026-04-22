@@ -15,6 +15,9 @@
 *.lol
 main.pdf
 
+# Allow the final thesis PDF
+!Abduvakhobov_Rustamjon_Thesis_2026.pdf
+
 # Python
 __pycache__/
 *.pyc
