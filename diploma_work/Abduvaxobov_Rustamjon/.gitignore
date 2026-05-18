@@ -1,27 +1,34 @@
-# LaTeX build artifacts
+# LaTeX generated files
 *.aux
 *.bbl
-*.bcf
 *.blg
-*.fdb_latexmk
-*.fls
 *.log
-*.out
-*.run.xml
-*.synctex.gz
 *.toc
+*.out
+*.synctex.gz
+*.run.xml
+*.bcf
+*.loa
 *.lof
-*.lot
 *.lol
-main.pdf
+*.lot
+*.pyg
+*.bbl-SAVE-ERROR
 
-# Allow the final thesis PDF
-!Abduvakhobov_Rustamjon_Thesis_2026.pdf
+# Editor-specific files
+.vscode/
+_minted-main/
 
-# Python
-__pycache__/
-*.pyc
+# Git internal files (optional, since .git is already ignored by Git itself)
+.git/
 
-# OS
-.DS_Store
-Thumbs.db
+# Miscellaneous
+*.bak
+*.sav
+*.old
+
+# Keep source files
+!*.tex
+!*.bib
+!*.cls
+!README.md
